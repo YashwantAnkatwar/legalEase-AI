@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LegalEase AI — Know Your Rights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ─── NOISE TEXTURE OVERLAY ──────────────────────────────────────── -->
+<div class="noise-overlay"></div>
+
+<!-- ─── API KEY MODAL ──────────────────────────────────────────────── -->
+<div id="api-modal" class="modal-overlay">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-header-gold">
+      <span class="modal-icon">⚡</span>
+      <h3>Connect Gemini AI</h3>
+    </div>
+    <p style="color:var(--text2);margin:12px 0 20px;line-height:1.6">Enter your Google Gemini API key to unlock all AI-powered features. Your key is stored locally and never sent to our servers.</p>
+    <input type="password" id="api-key-input" placeholder="AIza...your-gemini-api-key" style="width:100%;margin-bottom:12px">
+    <a href="https://makersuite.google.com/app/apikey" target="_blank" style="font-size:.82rem;color:var(--gold);display:block;margin-bottom:20px">→ Get a free Gemini API key</a>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-gold" onclick="saveApiKey()" style="flex:1">Activate AI Features</button>
+      <button class="btn btn-outline" onclick="closeApiModal()">Skip for now</button>
+    </div>
+  </div>
+  <p style="font-size:0.75rem;color:#a09882;margin-top:10px">
+    ⚠️ AI responses may not always be legally accurate. Verify with official sources.
+  </p>
+</div>
+
+<!-- ─── NAVBAR ─────────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" onclick="showPage('home')">
+      <div class="nav-logo-icon">⚖</div>
+      LegalEase <span class="gold">AI</span>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <a class="nav-link active" href="#" onclick="showPage('home')">
+        <span class="nav-icon">🏠</span><span>Home</span>
+      </a>
+      <a class="nav-link" href="#" onclick="showPage('learn')">
+        <span class="nav-icon">📚</span><span>Learn</span>
+      </a>
+      <a class="nav-link" href="#" onclick="showPage('emergency')">
+        <span class="nav-icon">🚨</span><span>Emergency</span>
+      </a>
+      <a class="nav-link" href="#" onclick="showPage('education')">
+        <span class="nav-icon">🎓</span><span>Education</span>
+      </a>
+      <a class="nav-link" href="#" onclick="showPage('docs')">
+        <span class="nav-icon">📄</span><span>Docs</span>
+      </a>
+      <a class="nav-link" href="#" onclick="showPage('help')">
+        <span class="nav-icon">❓</span><span>Help</span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <button class="btn btn-outline btn-sm" onclick="openApiModal()" title="Configure API Key">⚡ API</button>
+      <button class="avatar-btn" id="profile-btn" onclick="toggleProfilePanel()" title="Profile">👤</button>
+    </div>
+    <button class="hamburger" onclick="toggleMobileNav()" id="hamburger">☰</button>
+  </div>
+</nav>
+
+<!-- ─── LAW CATEGORY BAR ────────────────────────────────────────────── -->
+<div class="category-bar" id="category-bar">
+  <div class="category-scroll">
+    <button class="cat-btn" data-cat="all" onclick="filterLaws('all')">All Laws</button>
+    <button class="cat-btn" data-cat="criminal" onclick="filterLaws('criminal')">Criminal Law</button>
+    <button class="cat-btn" data-cat="civil" onclick="filterLaws('civil')">Civil Law</button>
+    <button class="cat-btn" data-cat="cyber" onclick="filterLaws('cyber')">Cyber Law</button>
+    <button class="cat-btn" data-cat="family" onclick="filterLaws('family')">Family Law</button>
+    <button class="cat-btn" data-cat="corporate" onclick="filterLaws('corporate')">Corporate Law</button>
+    <button class="cat-btn" data-cat="tax" onclick="filterLaws('tax')">Tax Law</button>
+    <button class="cat-btn" data-cat="constitutional" onclick="filterLaws('constitutional')">Constitutional</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span></span> India's First AI Legal Intelligence Platform <span></span>
+      </div>
+      <h1 class="hero-title">Know Your<br><em class="gold italic">Rights</em></h1>
+      <p class="hero-sub">Understand any Indian law, get emergency guidance, analyze your scenario and navigate the legal system with confidence.</p>
+
+      <div class="hero-search-wrap">
+        <span class="hero-search-icon">🔍</span>
+        <input type="text" class="hero-search" id="hero-search-input" placeholder="Search anything — Ask about any law, right, or legal situation..." onkeydown="if(event.key==='Enter')heroSearch()">
+        <button class="hero-search-btn" onclick="heroSearch()">Search</button>
+      </div>
+
+      <!-- Suggestion chips -->
+      <div class="hero-suggestions">
+        <button class="suggestion-chip" onclick="setHeroSearch('What is Article 21?')">What is Article 21?</button>
+        <button class="suggestion-chip" onclick="setHeroSearch('Can police arrest without warrant?')">Can police arrest without warrant?</button>
+        <button class="suggestion-chip" onclick="setHeroSearch('How to file an FIR?')">How to file an FIR?</button>
+        <button class="suggestion-chip" onclick="setHeroSearch('What is RTI Act?')">What is RTI Act?</button>
+        <button class="suggestion-chip" onclick="setHeroSearch('What is IPC Section 420?')">What is IPC 420?</button>
+        <button class="suggestion-chip" onclick="setHeroSearch('Tenant rights in India')">Tenant Rights</button>
+      </div>
+
+      <!-- AI Answer Panel -->
+      <div id="answer-panel">
+        <button class="answer-close" onclick="closeAnswerPanel()">✕</button>
+        <div class="answer-header">
+          <span>⚡</span> LegalEase AI Answer
+        </div>
+        <div class="answer-body" id="answer-body">
+          <div class="loading-dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">500+</span>
+          <span class="hero-stat-label">Laws Covered</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">24/7</span>
+          <span class="hero-stat-label">AI Assistance</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">12</span>
+          <span class="hero-stat-label">Legal Domains</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">Free</span>
+          <span class="hero-stat-label">Always</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>scroll</span>
+      <span style="font-size:1.2rem">↓</span>
+    </div>
+  </section>
+
+  <!-- FEATURE CARDS -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-label">Core Features</div>
+      <h2 class="section-title">Everything You Need,<br><em class="gold">Legally Speaking</em></h2>
+      <p class="section-sub">Four powerful modules designed to make the Indian legal system accessible to every citizen.</p>
+
+      <div class="feature-cards-grid">
+        <!-- LEARN -->
+        <div class="feature-card" onclick="showPage('learn')">
+          <div class="feature-card-glow blue-glow"></div>
+          <div class="feature-card-icon" style="background:rgba(41,128,185,.12);color:#3498db">📚</div>
+          <div class="card-badge badge-blue">Learn</div>
+          <h3>Legal Knowledge Hub</h3>
+          <p>Want legal knowledge? Our AI tutor explains laws in simple, beginner-friendly language — step by step.</p>
+          <div class="feature-card-topics">
+            <span>IPC Basics</span><span>FIR Process</span><span>Your Rights</span>
+          </div>
+          <button class="btn btn-blue btn-sm" style="margin-top:20px">Use Me →</button>
+        </div>
+
+        <!-- EMERGENCY -->
+        <div class="feature-card emergency-card" onclick="showPage('emergency')">
+          <div class="feature-card-glow red-glow"></div>
+          <div class="feature-card-icon" style="background:rgba(192,57,43,.12);color:#e74c3c">🚨</div>
+          <div class="card-badge badge-red">Emergency</div>
+          <h3>Emergency Legal Help</h3>
+          <p>Stuck in a legal scenario? Describe your situation and get immediate guidance, applicable laws & steps.</p>
+          <div class="feature-card-topics">
+            <span>Scam Help</span><span>Harassment</span><span>Cyber Crime</span>
+          </div>
+          <button class="btn btn-danger btn-sm" style="margin-top:20px">Use Me →</button>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="feature-card" onclick="showPage('education')">
+          <div class="feature-card-glow green-glow"></div>
+          <div class="feature-card-icon" style="background:rgba(39,174,96,.12);color:#2ecc71">🎓</div>
+          <div class="card-badge badge-green">Education</div>
+          <h3>Law Education Center</h3>
+          <p>Want to learn about specific laws? Browse by department, explore law cards with AI explanations.</p>
+          <div class="feature-card-topics">
+            <span>IPC 420</span><span>Article 14</span><span>RTI Act</span>
+          </div>
+          <button class="btn btn-sm" style="margin-top:20px;background:rgba(39,174,96,.2);border:1px solid rgba(39,174,96,.4);color:#2ecc71">Use Me →</button>
+        </div>
+
+        <!-- HELP -->
+        <div class="feature-card" onclick="showPage('help')">
+          <div class="feature-card-glow purple-glow"></div>
+          <div class="feature-card-icon" style="background:rgba(155,89,182,.12);color:#9b59b6">❓</div>
+          <div class="card-badge badge-purple">Help</div>
+          <h3>FAQ & Support</h3>
+          <p>Common legal questions answered. Find quick solutions to frequently asked legal queries and guidance.</p>
+          <div class="feature-card-topics">
+            <span>FAQ</span><span>Guides</span><span>Support</span>
+          </div>
+          <button class="btn btn-purple btn-sm" style="margin-top:20px">Use Me →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAW SIMPLIFIER PROMO -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="container">
+      <div class="two-col-section">
+        <div>
+          <div class="section-label">AI Powered</div>
+          <h2 class="section-title">Law Simplifier</h2>
+          <p class="section-sub">Choose your understanding level — Student, Citizen, or Expert — and get explanations tailored just for you.</p>
+          <div class="level-pills">
+            <button class="level-pill active" onclick="setSimplifierLevel('student')">🎒 Student</button>
+            <button class="level-pill" onclick="setSimplifierLevel('citizen')">🏠 Citizen</button>
+            <button class="level-pill" onclick="setSimplifierLevel('expert')">⚖ Expert</button>
+          </div>
+          <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+            <input type="text" id="simplifier-input" placeholder="Enter any law or legal term..." style="flex:1;min-width:200px">
+            <button class="btn btn-gold" onclick="simplifyLaw()">Simplify</button>
+          </div>
+          <div id="simplifier-result" class="ai-result-box" style="display:none;margin-top:16px"></div>
+        </div>
+        <div class="simplifier-visual">
+          <div class="visual-card">
+            <div class="visual-card-label">IPC Section 302</div>
+            <div class="visual-card-level student-level">🎒 Student Level</div>
+            <p>Murder is when someone <em>intentionally</em> kills another person. It is one of the most serious crimes in India and can lead to life imprisonment or even the death penalty.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENARIO ANALYZER & DOCUMENT GENERATOR PROMO -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Advanced Tools</div>
+      <h2 class="section-title">More Powerful Features</h2>
+      <div class="grid-3" style="margin-top:40px">
+        <div class="card promo-card" onclick="showPage('scenario')">
+          <span class="card-icon">🔬</span>
+          <div class="card-badge badge-blue">AI Analysis</div>
+          <h3>Scenario Analyzer</h3>
+          <p style="color:var(--text2);font-size:.88rem;margin-top:8px">Describe your legal situation. AI analyzes applicable laws, potential outcomes and recommended actions.</p>
+          <button class="btn btn-outline btn-sm" style="margin-top:16px">Analyze →</button>
+        </div>
+        <div class="card promo-card" onclick="showPage('docs')">
+          <span class="card-icon">📄</span>
+          <div class="card-badge badge-gold">Generator</div>
+          <h3>Document Generator</h3>
+          <p style="color:var(--text2);font-size:.88rem;margin-top:8px">Generate FIR drafts, legal notices, RTI applications and complaint letters powered by Gemini AI.</p>
+          <button class="btn btn-outline btn-sm" style="margin-top:16px">Generate →</button>
+        </div>
+        <div class="card promo-card" onclick="showPage('quiz')">
+          <span class="card-icon">🧠</span>
+          <div class="card-badge badge-green">Quiz</div>
+          <h3>Legal Quiz</h3>
+          <p style="color:var(--text2);font-size:.88rem;margin-top:8px">Test your legal knowledge with AI-generated quizzes. Earn XP and track your progress on the dashboard.</p>
+          <button class="btn btn-outline btn-sm" style="margin-top:16px">Start Quiz →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     LEARN PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-learn" class="page">
+  <div class="page-header learn-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#3498db">📚 AI Tutor</div>
+        <h2>Legal Education <span class="italic" style="color:#3498db">AI</span></h2>
+        <p style="color:var(--text2)">Learn Indian Law system in simple language</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding-top:40px;padding-bottom:80px">
+    <div class="chat-layout">
+      <!-- Quick Topics -->
+      <div class="quick-topics-bar">
+        <div class="section-label" style="margin-bottom:12px;color:#3498db">Quick Topics</div>
+        <div class="quick-topics-grid">
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('Start with the basics of Indian law system')">📖 Start with Basics</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('What is IPC (Indian Penal Code)?')">⚖ What is IPC?</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('What is FIR and what does it mean?')">📋 What is FIR?</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('What are my fundamental rights as an Indian citizen?')">🛡 Your Rights</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('How to file an FIR at a police station step by step?')">📝 How to File FIR</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('What is the Right to Information (RTI) Act?')">📢 What is RTI?</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('What are consumer rights in India?')">🛒 Consumer Rights</button>
+          <button class="topic-btn learn-topic" onclick="sendLearnMessage('What is the difference between Civil and Criminal law?')">🔍 Civil vs Criminal</button>
+        </div>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area">
+        <div class="chat-messages" id="learn-messages">
+          <div class="chat-msg ai-msg">
+            <div class="msg-avatar" style="background:rgba(41,128,185,.2);color:#3498db">⚖</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:#3498db">LegalEase AI</div>
+              <div class="msg-text">Namaste! 🙏 I'm your personal legal tutor. I explain Indian laws in simple, everyday language — no jargon, no confusion.<br><br>Ask me anything about Indian law, or pick a quick topic on the left to get started!</div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-continuation-bar">
+          <button class="btn btn-continue" onclick="continueLearnChat()" title="Continue from where we left off">👉 Continue Learning</button>
+          <button class="btn btn-reset" onclick="resetLearnChat()" title="Start a new conversation">🔄 Reset Chat</button>
+        </div>
+        <div class="chat-input-bar">
+          <input type="text" id="learn-input" placeholder="Ask me what you want to learn about Indian law..." onkeydown="if(event.key==='Enter')sendLearnMessage()">
+          <button class="btn btn-blue" onclick="sendLearnMessage()">Learn →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-learn -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     EMERGENCY PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-emergency" class="page">
+  <div class="page-header emergency-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#e74c3c">🚨 Emergency</div>
+        <h2>Emergency Legal <span style="color:#e74c3c">Assistance</span></h2>
+        <p style="color:var(--text2)">Get Immediate Legal Guidance — Available 24/7</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding-top:40px;padding-bottom:80px">
+    <div class="chat-layout">
+      <!-- Quick Actions -->
+      <div class="quick-topics-bar">
+        <div class="section-label" style="margin-bottom:12px;color:#e74c3c">Quick Actions</div>
+        <div class="quick-topics-grid">
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('I have been scammed and lost money. What should I do immediately?')">💸 I've Been Scammed</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('Someone is harassing me repeatedly. What legal options do I have?')">😰 Someone is Harassing Me</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('I am a victim of cyber crime. What immediate steps should I take?')">💻 Cyber Crime Help</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('I am facing domestic violence. What are my legal rights and immediate steps?')">🏠 Domestic Violence</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('I have been wrongfully arrested. What are my rights?')">🚔 Wrongful Arrest</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('My employer is not paying my salary. What legal action can I take?')">💼 Salary Dispute</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('Someone is blackmailing me. What should I do legally?')">⚠ Blackmail</button>
+          <button class="topic-btn danger-topic" onclick="sendEmergencyMessage('My property is being encroached upon illegally. What can I do?')">🏗 Property Dispute</button>
+        </div>
+
+        <!-- Emergency Numbers -->
+        <div class="emergency-numbers">
+          <div class="section-label" style="margin:20px 0 10px">Emergency Contacts</div>
+          <div class="emergency-num"><span>🚨 Police</span><strong>100</strong></div>
+          <div class="emergency-num"><span>👩 Women Helpline</span><strong>1091</strong></div>
+          <div class="emergency-num"><span>💻 Cyber Crime</span><strong>1930</strong></div>
+          <div class="emergency-num"><span>⚖ Legal Aid</span><strong>15100</strong></div>
+          <div class="emergency-num"><span>🧒 Child Helpline</span><strong>1098</strong></div>
+        </div>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area">
+        <div class="chat-messages" id="emergency-messages">
+          <div class="chat-msg ai-msg">
+            <div class="msg-avatar" style="background:rgba(192,57,43,.2);color:#e74c3c">🚨</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:#e74c3c">Emergency Legal AI</div>
+              <div class="msg-text">I'm here to help you immediately. Describe your legal emergency in detail and I will provide:<br><br>
+              ✅ Applicable laws &amp; sections<br>
+              ✅ Immediate steps to take<br>
+              ✅ Required documents<br>
+              ✅ Emergency contacts<br><br>
+              <strong style="color:#e74c3c">For life-threatening situations, call 112 immediately.</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-bar">
+          <input type="text" id="emergency-input" placeholder="Describe your situation in detail..." onkeydown="if(event.key==='Enter')sendEmergencyMessage()">
+          <button class="btn btn-danger" onclick="sendEmergencyMessage()">Get Help →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-bottom:15px;color:#e74c3c;font-size:0.85rem">
+    ⚠️ This is AI-based guidance. In emergencies, contact a lawyer or authorities immediately.
+  </div>
+</div><!-- /page-emergency -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     EDUCATION PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-education" class="page">
+  <div class="page-header education-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#2ecc71">🎓 Law Library</div>
+        <h2>Education <span class="italic" style="color:#2ecc71">Center</span></h2>
+        <p style="color:var(--text2)">Browse, explore & learn about specific Indian laws</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:40px 24px 80px">
+    <div class="law-library-panel">
+      <div class="law-search-row">
+        <div class="law-search-box law-search-wrapper" style="position:relative;flex:1">
+          <span>🔍</span>
+          <input type="text" id="law-search-input"
+            placeholder="Search any Article, IPC section, Act, keyword..."
+            oninput="updateLawSearch()"
+            onkeydown="if(event.key==='Enter')updateLawSearch()"
+            autocomplete="off">
+          <div id="law-search-suggestions"></div>
+        </div>
+        <button class="btn btn-outline" onclick="clearLawSearch()">✕ Clear</button>
+      </div>
+      <div class="law-library-stats" id="law-library-stats"></div>
+    </div>
+
+
+    <!-- Department Filter -->
+    <div class="dept-filter">
+      <button class="dept-btn active" data-dept="all" onclick="filterEducation('all')">⚡ All Laws</button>
+      <button class="dept-btn" data-dept="constitutional" onclick="filterEducation('constitutional')">⚖️ Constitutional</button>
+      <button class="dept-btn" data-dept="criminal" onclick="filterEducation('criminal')">🔒 Criminal</button>
+      <button class="dept-btn" data-dept="civil" onclick="filterEducation('civil')">🏛️ Civil</button>
+      <button class="dept-btn" data-dept="cyber" onclick="filterEducation('cyber')">💻 Cyber</button>
+      <button class="dept-btn" data-dept="family" onclick="filterEducation('family')">👨‍👩‍👧 Family</button>
+      <button class="dept-btn" data-dept="corporate" onclick="filterEducation('corporate')">🏢 Corporate</button>
+      <button class="dept-btn" data-dept="tax" onclick="filterEducation('tax')">💰 Tax</button>
+    </div>
+
+    <div class="law-results-bar">
+      <span id="law-result-count">0 results</span>
+      <span>Details are generated only when opened.</span>
+    </div>
+
+    <!-- Law Cards Grid -->
+    <div class="law-grid" id="law-cards-grid">
+      <!-- Generated by JS -->
+    </div>
+
+    <div class="load-more-wrap">
+      <button class="btn btn-green" id="load-more-laws" onclick="loadMoreLaws()">⬇ Load More Laws</button>
+    </div>
+  </div>
+</div><!-- /page-education -->
+
+<!-- LAW DETAIL MODAL -->
+<div class="modal-overlay" id="law-modal-overlay" onclick="closeLawModal(event)">
+  <div class="modal-box law-modal-box" id="law-modal-box" role="dialog" aria-modal="true" aria-labelledby="law-modal-content">
+    <button class="modal-close-btn" onclick="document.getElementById('law-modal-overlay').classList.remove('open')">✕ Close</button>
+    <div id="law-modal-content" class="law-modal-content"></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     DOCS PAGE — DOCUMENT GENERATOR
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-docs" class="page">
+  <div class="page-header docs-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#e67e22">📄 AI Generator</div>
+        <h2>Legal Document <span class="italic" style="color:#e67e22">Generator</span></h2>
+        <p style="color:var(--text2)">Fill in details, AI drafts your legal document instantly</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:40px 24px 80px">
+    <!-- Doc Type Tabs -->
+    <div class="doc-tabs">
+      <button class="doc-tab active" onclick="switchDocTab('fir')">📋 FIR Draft</button>
+      <button class="doc-tab" onclick="switchDocTab('notice')">⚖ Legal Notice</button>
+      <button class="doc-tab" onclick="switchDocTab('rti')">📢 RTI Application</button>
+      <button class="doc-tab" onclick="switchDocTab('complaint')">✉ Complaint Letter</button>
+    </div>
+
+    <div class="doc-layout">
+      <!-- Form Panel -->
+      <div class="doc-form-panel" id="doc-form-panel">
+        <!-- FIR Form -->
+        <div class="doc-form active" id="form-fir">
+          <h3 style="margin-bottom:20px;color:var(--gold2)">FIR Draft Details</h3>
+          <div class="form-group"><label>Your Full Name</label><input type="text" id="fir-name" placeholder="e.g. Rahul Sharma"></div>
+          <div class="form-group"><label>Date of Incident</label><input type="date" id="fir-date"></div>
+          <div class="form-group"><label>Place of Incident</label><input type="text" id="fir-place" placeholder="e.g. Near Connaught Place, New Delhi"></div>
+          <div class="form-group"><label>Describe the Incident</label><textarea id="fir-incident" rows="4" placeholder="Describe what happened in detail..."></textarea></div>
+          <div class="form-group"><label>Accused Name/Description (if known)</label><input type="text" id="fir-accused" placeholder="e.g. Unknown person / John Doe"></div>
+          <div class="form-group"><label>Witnesses (if any)</label><input type="text" id="fir-witness" placeholder="Names of witnesses"></div>
+          <button class="btn btn-orange" onclick="generateDocument('fir')" style="width:100%;margin-top:8px">⚡ Generate FIR Draft</button>
+        </div>
+
+        <!-- Legal Notice Form -->
+        <div class="doc-form" id="form-notice">
+          <h3 style="margin-bottom:20px;color:var(--gold2)">Legal Notice Details</h3>
+          <div class="form-group"><label>Your Name & Address</label><textarea id="notice-from" rows="2" placeholder="Your full name and address"></textarea></div>
+          <div class="form-group"><label>Recipient Name & Address</label><textarea id="notice-to" rows="2" placeholder="Who are you sending this to?"></textarea></div>
+          <div class="form-group"><label>Subject / Nature of Notice</label><input type="text" id="notice-subject" placeholder="e.g. Non-payment of rent, Property dispute"></div>
+          <div class="form-group"><label>Facts & Details</label><textarea id="notice-facts" rows="4" placeholder="Explain the facts and what happened..."></textarea></div>
+          <div class="form-group"><label>What do you demand/request?</label><textarea id="notice-demand" rows="2" placeholder="e.g. Pay Rs. 50,000 within 15 days"></textarea></div>
+          <button class="btn btn-orange" onclick="generateDocument('notice')" style="width:100%;margin-top:8px">⚡ Generate Legal Notice</button>
+        </div>
+
+        <!-- RTI Form -->
+        <div class="doc-form" id="form-rti">
+          <h3 style="margin-bottom:20px;color:var(--gold2)">RTI Application Details</h3>
+          <div class="form-group"><label>Your Name & Address</label><textarea id="rti-name" rows="2" placeholder="Your full name and address"></textarea></div>
+          <div class="form-group"><label>Public Authority (Whom to apply?)</label><input type="text" id="rti-authority" placeholder="e.g. Municipal Corporation of Delhi"></div>
+          <div class="form-group"><label>Information Sought</label><textarea id="rti-info" rows="4" placeholder="Clearly state what information you are seeking..."></textarea></div>
+          <div class="form-group"><label>Period of Information</label><input type="text" id="rti-period" placeholder="e.g. From Jan 2020 to Dec 2023"></div>
+          <button class="btn btn-orange" onclick="generateDocument('rti')" style="width:100%;margin-top:8px">⚡ Generate RTI Application</button>
+        </div>
+
+        <!-- Complaint Letter Form -->
+        <div class="doc-form" id="form-complaint">
+          <h3 style="margin-bottom:20px;color:var(--gold2)">Complaint Letter Details</h3>
+          <div class="form-group"><label>Your Name & Contact</label><input type="text" id="comp-name" placeholder="Your name and contact details"></div>
+          <div class="form-group"><label>Authority to Write To</label><input type="text" id="comp-to" placeholder="e.g. Commissioner of Police, Consumer Forum"></div>
+          <div class="form-group"><label>Subject of Complaint</label><input type="text" id="comp-subject" placeholder="Brief subject"></div>
+          <div class="form-group"><label>Details of Complaint</label><textarea id="comp-details" rows="5" placeholder="Explain your complaint in detail with dates and events..."></textarea></div>
+          <div class="form-group"><label>Relief Sought</label><textarea id="comp-relief" rows="2" placeholder="What action do you want the authority to take?"></textarea></div>
+          <button class="btn btn-orange" onclick="generateDocument('complaint')" style="width:100%;margin-top:8px">⚡ Generate Complaint Letter</button>
+        </div>
+      </div>
+
+      <!-- Preview Panel -->
+      <div class="doc-preview-panel">
+        <div class="preview-header">
+          <span>📄 Document Preview</span>
+          <button class="btn btn-outline btn-sm" onclick="copyDocument()" id="copy-doc-btn" style="display:none">📋 Copy</button>
+        </div>
+        <div class="preview-content" id="doc-preview">
+          <div class="preview-placeholder">
+            <span style="font-size:3rem">📄</span>
+            <p>Fill in the form and click Generate. Your AI-powered legal document will appear here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-docs -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SCENARIO ANALYZER PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-scenario" class="page">
+  <div class="page-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label">AI Analysis</div>
+        <h2>Scenario <span class="gold italic">Analyzer</span></h2>
+        <p style="color:var(--text2)">Describe your situation, AI analyzes applicable laws & next steps</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:40px 24px 80px">
+    <div class="scenario-layout">
+      <div class="scenario-input-panel">
+        <h3 style="margin-bottom:16px">Describe Your Situation</h3>
+        <textarea id="scenario-text" rows="8" placeholder="Explain your legal situation in detail. For example: My landlord is refusing to return my security deposit of Rs. 50,000 even after I vacated the property 3 months ago with proper notice..." style="width:100%;resize:vertical" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); analyzeScenario(); }"></textarea>
+        <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+          <select id="scenario-category" style="flex:1">
+            <option value="general">General Legal Issue</option>
+            <option value="criminal">Criminal Matter</option>
+            <option value="civil">Civil Dispute</option>
+            <option value="family">Family Matter</option>
+            <option value="consumer">Consumer Issue</option>
+            <option value="employment">Employment Dispute</option>
+            <option value="property">Property Matter</option>
+            <option value="cyber">Cyber Crime</option>
+          </select>
+          <button class="btn btn-gold" onclick="analyzeScenario()">🔬 Analyze Now</button>
+        </div>
+        <div class="example-scenarios" style="margin-top:24px">
+          <div class="section-label" style="margin-bottom:10px">Try an Example</div>
+          <button class="suggestion-chip" onclick="setScenario('My employer fired me without any notice or compensation after 3 years of service. Is this legal?')">Wrongful Termination</button>
+          <button class="suggestion-chip" onclick="setScenario('A shopkeeper sold me a defective product and is refusing to replace or refund it.')">Consumer Dispute</button>
+          <button class="suggestion-chip" onclick="setScenario('My neighbor has built a wall that encroaches 2 feet into my property boundary.')">Property Dispute</button>
+        </div>
+      </div>
+      <div class="scenario-result-panel">
+        <div class="scenario-result-placeholder" id="scenario-placeholder">
+          <span style="font-size:3rem">🔬</span>
+          <p>Your analysis will appear here with applicable laws, risk assessment, and recommended actions.</p>
+        </div>
+        <div id="scenario-result" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-scenario -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     QUIZ PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-quiz" class="page">
+  <div class="page-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label">Gamified Learning</div>
+        <h2>Legal <span class="gold italic">Quiz</span></h2>
+        <p style="color:var(--text2)">Test your knowledge. Earn XP. Master Indian Law.</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:40px 24px 80px">
+    <div id="quiz-start-screen" class="quiz-screen">
+      <div class="quiz-start-card">
+        <div style="font-size:4rem;margin-bottom:16px">🧠</div>
+        <h3 style="margin-bottom:10px">Legal Knowledge Quiz</h3>
+        <p style="color:var(--text2);margin-bottom:24px">Answer 5 AI-generated questions about Indian law. Earn XP for correct answers!</p>
+        <p style="color:var(--text2);font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">Topic</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">
+          <button class="dept-btn active" id="quiz-cat-btn" data-cat="general" onclick="selectQuizCat(this,'general')">General Law</button>
+          <button class="dept-btn" data-cat="criminal" onclick="selectQuizCat(this,'criminal')">Criminal</button>
+          <button class="dept-btn" data-cat="constitutional" onclick="selectQuizCat(this,'constitutional')">Constitutional</button>
+          <button class="dept-btn" data-cat="consumer" onclick="selectQuizCat(this,'consumer')">Consumer</button>
+        </div>
+        <p style="color:var(--text2);font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">Difficulty</p>
+        <div id="quiz-difficulty-btns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:28px">
+          <button class="dept-btn" onclick="selectQuizDifficulty(this,'easy')" style="color:#2ecc71;border-color:#2ecc7130">🟢 Easy</button>
+          <button class="dept-btn active" onclick="selectQuizDifficulty(this,'medium')" style="">🟡 Medium</button>
+          <button class="dept-btn" onclick="selectQuizDifficulty(this,'hard')" style="color:#e74c3c;border-color:#e74c3c30">🔴 Hard</button>
+        </div>
+        <button class="btn btn-gold" onclick="startQuiz()" style="padding:14px 40px;font-size:1rem">Start Quiz →</button>
+      </div>
+    </div>
+    <div id="quiz-question-screen" class="quiz-screen" style="display:none">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-progress"></div>
+      </div>
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-loading"><div class="loading-dots"><span></span><span></span><span></span></div> Generating question...</div>
+      </div>
+    </div>
+    <div id="quiz-result-screen" class="quiz-screen" style="display:none">
+      <div class="quiz-result-card" id="quiz-result-card"></div>
+    </div>
+  </div>
+</div><!-- /page-quiz -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     HELP PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-help" class="page">
+  <div class="page-header help-header">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('home')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#9b59b6">❓ Support</div>
+        <h2>Help & <span class="italic" style="color:#9b59b6">FAQs</span></h2>
+        <p style="color:var(--text2)">Frequently asked legal questions, answered clearly</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:40px 24px 80px">
+    <div class="faq-grid" id="faq-grid">
+      <!-- Generated by JS -->
+    </div>
+    <div style="margin-top:48px;text-align:center">
+      <h3 style="margin-bottom:12px">Can't find your answer?</h3>
+      <p style="color:var(--text2);margin-bottom:20px">Ask our AI assistant directly</p>
+      <div style="display:flex;gap:10px;max-width:600px;margin:0 auto">
+        <input type="text" id="help-input" placeholder="Ask any legal question..." style="flex:1" onkeydown="if(event.key==='Enter')askHelpAI()">
+        <button class="btn btn-purple" onclick="askHelpAI()">Ask AI</button>
+      </div>
+      <div id="help-ai-result" class="ai-result-box" style="display:none;margin-top:16px;max-width:600px;margin-left:auto;margin-right:auto"></div>
+    </div>
+  </div>
+</div><!-- /page-help -->
+
+
+<!-- ─── TOAST NOTIFICATION ─────────────────────────────────────────── -->
+<div id="toast" class="toast"></div>
+
+<!-- ─── FLOATING NEWS BUTTON ───────────────────────────────────────── -->
+<button id="news-fab" class="news-fab btn-gold" onclick="toggleNewsPanel()" title="Legal News & Daily Reports">
+  📰
+</button>
+
+<!-- ─── NEWS PANEL (horizontal 3-column layout) ────────────────────── -->
+<div id="news-panel" class="news-panel-wide">
+  <!-- Panel Header -->
+  <div class="news-panel-header">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.1rem">📰</span>
+      <h3 style="margin:0;font-size:1rem;font-family:var(--font-serif)">Legal Dashboard</h3>
+    </div>
+    <button onclick="toggleNewsPanel()" class="news-panel-close">✕</button>
+  </div>
+
+  <!-- 3-Column Body -->
+  <div class="news-panel-body">
+
+    <!-- ── COLUMN 1: Latest News ─────────────────────────────────── -->
+    <div class="news-col">
+      <div class="news-col-header">
+        <span class="news-col-label" style="color:var(--gold)">📰 Latest Legal News</span>
+        <button class="news-refresh-btn" onclick="refreshNewsSection('latest')" title="Refresh">↻</button>
+      </div>
+      <!-- Category Filters -->
+      <div class="news-filter-row" id="news-cat-filters">
+        <button class="news-filter-btn active" data-cat="" onclick="setNewsCategory(this,'')">All</button>
+        <button class="news-filter-btn" data-cat="supreme-court" onclick="setNewsCategory(this,'supreme-court')">SC</button>
+        <button class="news-filter-btn" data-cat="high-court" onclick="setNewsCategory(this,'high-court')">HC</button>
+        <button class="news-filter-btn" data-cat="legislation" onclick="setNewsCategory(this,'legislation')">Acts</button>
+        <button class="news-filter-btn" data-cat="corporate" onclick="setNewsCategory(this,'corporate')">Corp</button>
+        <button class="news-filter-btn" data-cat="criminal" onclick="setNewsCategory(this,'criminal')">Criminal</button>
+      </div>
+      <div id="news-latest-content" class="news-col-content">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <!-- ── COLUMN 2: Case Law Updates ───────────────────────────── -->
+    <div class="news-col">
+      <div class="news-col-header">
+        <span class="news-col-label" style="color:#3498db">⚖️ Recent Case Law</span>
+        <button class="news-refresh-btn" onclick="refreshNewsSection('updates')" title="Refresh">↻</button>
+      </div>
+      <!-- Court Filters -->
+      <div class="news-filter-row" id="news-court-filters">
+        <button class="news-filter-btn active" data-court="" onclick="setCourtFilter(this,'')">All Courts</button>
+        <button class="news-filter-btn" data-court="supreme-court" onclick="setCourtFilter(this,'supreme-court')">Supreme Court</button>
+        <button class="news-filter-btn" data-court="high-court" onclick="setCourtFilter(this,'high-court')">High Courts</button>
+        <button class="news-filter-btn" data-court="tribunal" onclick="setCourtFilter(this,'tribunal')">Tribunals</button>
+      </div>
+      <div id="news-updates-content" class="news-col-content">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <!-- ── COLUMN 3: Daily Tip ───────────────────────────────────── -->
+    <div class="news-col">
+      <div class="news-col-header">
+        <span class="news-col-label" style="color:#2ecc71">💡 Daily Legal Tip</span>
+        <button class="news-refresh-btn" onclick="refreshNewsSection('tips')" title="Get new tip">↻</button>
+      </div>
+      <div id="news-tips-content" class="news-col-content news-tip-box">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+      </div>
+      <!-- Saved News Section -->
+      <div style="margin-top:16px">
+        <div class="news-col-label" style="color:var(--gold2);font-size:.75rem;margin-bottom:8px">⭐ SAVED ARTICLES</div>
+        <div id="saved-news-list" class="saved-news-list">
+          <p style="color:var(--text3);font-size:.8rem">No saved articles yet. Click ☆ Save on any news item.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /news-panel-body -->
+</div><!-- /news-panel-wide -->
+
+<!-- ─── PROFILE PANEL ─────────────────────────────────────────────── -->
+<div id="profile-panel" class="profile-panel">
+  <div class="profile-header">
+    <h3>Profile</h3>
+    <button onclick="toggleProfilePanel()" style="background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer">✕</button>
+  </div>
+  
+  <div class="profile-user-info">
+    <div class="profile-avatar-large">👤</div>
+    <input type="text" id="profile-name-input" class="profile-name-input" value="Guest User" placeholder="Enter your name" onchange="saveProfileName()" />
+  </div>
+
+  <div class="xp-section">
+    <div class="xp-label"><span>⭐ XP Points</span><strong id="dash-xp">0</strong></div>
+    <div class="xp-bar"><div class="xp-fill" id="dash-xp-bar" style="width:0%"></div></div>
+    <p style="font-size:.78rem;color:var(--text3);margin-top:4px">Next level: <span id="dash-next-level">100 XP</span></p>
+  </div>
+
+  <div class="dash-section profile-preferences">
+    <div class="section-label" style="margin-bottom:10px">Preferences</div>
+    <div class="pref-row">
+      <span>Language</span>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="lang-hi" onclick="setLang('hi')">हि</button>
+      </div>
+    </div>
+    <div class="pref-row" style="margin-top: 12px;">
+      <span>Theme</span>
+      <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()">
+        <span class="theme-icon light-icon">☀️ Day</span>
+        <span class="theme-icon dark-icon">🌙 Night</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="dash-section">
+    <div class="section-label" style="margin-bottom:10px">Bookmarks</div>
+    <div id="bookmarks-list" style="color:var(--text3);font-size:.85rem;display:flex;flex-direction:column;gap:8px;">No bookmarks yet.</div>
+  </div>
+
+  <div class="dash-section">
+    <div class="section-label" style="margin-bottom:10px">Recently Viewed</div>
+    <div id="recent-list" style="color:var(--text3);font-size:.85rem;display:flex;flex-direction:column;gap:8px;">No recently viewed laws.</div>
+  </div>
+
+  <div class="dash-section">
+    <div class="section-label" style="margin-bottom:10px">⭐ Saved News</div>
+    <div id="profile-saved-news" style="color:var(--text3);font-size:.85rem;display:flex;flex-direction:column;gap:8px;">No saved articles yet.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CRIMINAL LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-criminal" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(192,57,43,.18),rgba(231,76,60,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#e74c3c">🔒 Criminal Law</div>
+        <h2>Criminal Law <span class="italic" style="color:#e74c3c">Library</span></h2>
+        <p style="color:var(--text2)">IPC · CrPC · Indian Evidence Act · NIA Act</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="criminal-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('criminal','ipc',this)">📖 IPC</button>
+      <button class="law-page-tab" onclick="switchLawTab('criminal','crpc',this)">⚖️ CrPC</button>
+      <button class="law-page-tab" onclick="switchLawTab('criminal','iea',this)">📋 Evidence Act</button>
+      <button class="law-page-tab" onclick="switchLawTab('criminal','nia',this)">🛡️ NIA Act</button>
+      <button class="law-page-tab" onclick="switchLawTab('criminal','bns',this)">🆕 BNS/BNSS</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="criminal-search" placeholder="Search sections, keywords…" oninput="filterLawPage('criminal')" />
+      <span id="criminal-count" class="law-page-count"></span>
+    </div>
+    <div id="criminal-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CIVIL LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-civil" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(41,128,185,.18),rgba(52,152,219,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#3498db">🏛️ Civil Law</div>
+        <h2>Civil Law <span class="italic" style="color:#3498db">Library</span></h2>
+        <p style="color:var(--text2)">CPC · Consumer Protection · Contracts · Property · Labour</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="civil-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('civil','cpc',this)">⚖️ CPC</button>
+      <button class="law-page-tab" onclick="switchLawTab('civil','consumer',this)">🛒 Consumer</button>
+      <button class="law-page-tab" onclick="switchLawTab('civil','property',this)">🏠 Property</button>
+      <button class="law-page-tab" onclick="switchLawTab('civil','labour',this)">💼 Labour</button>
+      <button class="law-page-tab" onclick="switchLawTab('civil','other_civil',this)">📜 Other Acts</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="civil-search" placeholder="Search sections, keywords…" oninput="filterLawPage('civil')" />
+      <span id="civil-count" class="law-page-count"></span>
+    </div>
+    <div id="civil-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CYBER LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-cyber" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(22,160,133,.18),rgba(26,188,156,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#1abc9c">💻 Cyber Law</div>
+        <h2>Cyber Law <span class="italic" style="color:#1abc9c">Library</span></h2>
+        <p style="color:var(--text2)">IT Act 2000 · DPDP Act 2023 · IT Rules 2021</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="cyber-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('cyber','it_general',this)">🖥️ IT Act — General</button>
+      <button class="law-page-tab" onclick="switchLawTab('cyber','it_offences',this)">🚨 Cyber Offences</button>
+      <button class="law-page-tab" onclick="switchLawTab('cyber','it_govt',this)">🏛️ Govt Powers</button>
+      <button class="law-page-tab" onclick="switchLawTab('cyber','dpdp',this)">🔐 Data Protection</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="cyber-search" placeholder="Search sections, keywords…" oninput="filterLawPage('cyber')" />
+      <span id="cyber-count" class="law-page-count"></span>
+    </div>
+    <div id="cyber-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     FAMILY LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-family" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(142,68,173,.18),rgba(155,89,182,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#9b59b6">👨‍👩‍👧 Family Law</div>
+        <h2>Family Law <span class="italic" style="color:#9b59b6">Library</span></h2>
+        <p style="color:var(--text2)">Hindu Marriage · Special Marriage · Muslim Personal Law · Domestic Violence · Adoption</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="family-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('family','hma',this)">🕉️ Hindu Marriage</button>
+      <button class="law-page-tab" onclick="switchLawTab('family','sma',this)">💍 Special Marriage</button>
+      <button class="law-page-tab" onclick="switchLawTab('family','mpl',this)">☪️ Muslim Personal Law</button>
+      <button class="law-page-tab" onclick="switchLawTab('family','dv',this)">🛡️ Domestic Violence</button>
+      <button class="law-page-tab" onclick="switchLawTab('family','adoption',this)">👶 Adoption & Guardianship</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="family-search" placeholder="Search sections, keywords…" oninput="filterLawPage('family')" />
+      <span id="family-count" class="law-page-count"></span>
+    </div>
+    <div id="family-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CORPORATE LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-corporate" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(211,84,0,.18),rgba(230,126,34,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#e67e22">🏢 Corporate Law</div>
+        <h2>Corporate Law <span class="italic" style="color:#e67e22">Library</span></h2>
+        <p style="color:var(--text2)">Companies Act · IBC · SEBI · FEMA · Competition Act</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="corporate-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('corporate','ca_formation',this)">🏗️ Formation</button>
+      <button class="law-page-tab" onclick="switchLawTab('corporate','ca_governance',this)">🎯 Governance</button>
+      <button class="law-page-tab" onclick="switchLawTab('corporate','ca_finance',this)">💰 Finance & Audit</button>
+      <button class="law-page-tab" onclick="switchLawTab('corporate','ca_winding',this)">📉 Insolvency</button>
+      <button class="law-page-tab" onclick="switchLawTab('corporate','other_corp',this)">📜 Other Acts</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="corporate-search" placeholder="Search sections, keywords…" oninput="filterLawPage('corporate')" />
+      <span id="corporate-count" class="law-page-count"></span>
+    </div>
+    <div id="corporate-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TAX LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-tax" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(243,156,18,.18),rgba(241,196,15,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#f39c12">💰 Tax Law</div>
+        <h2>Tax Law <span class="italic" style="color:#f39c12">Library</span></h2>
+        <p style="color:var(--text2)">Income Tax Act · GST · TDS · Customs · Benami</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="tax-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('tax','it_charge',this)">📊 Charge & Heads</button>
+      <button class="law-page-tab" onclick="switchLawTab('tax','it_deductions',this)">➖ Deductions</button>
+      <button class="law-page-tab" onclick="switchLawTab('tax','it_tds',this)">✂️ TDS/TCS</button>
+      <button class="law-page-tab" onclick="switchLawTab('tax','it_assessment',this)">📋 Assessment</button>
+      <button class="law-page-tab" onclick="switchLawTab('tax','other_tax',this)">📜 GST & Others</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="tax-search" placeholder="Search sections, keywords…" oninput="filterLawPage('tax')" />
+      <span id="tax-count" class="law-page-count"></span>
+    </div>
+    <div id="tax-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CONSTITUTIONAL LAW PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div id="page-constitutional" class="page">
+  <div class="page-header" style="background:linear-gradient(135deg,rgba(39,174,96,.18),rgba(46,204,113,.08))">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('education')">← Back</button>
+      <div class="page-header-text">
+        <div class="section-label" style="color:#2ecc71">⚖️ Constitutional Law</div>
+        <h2>Constitutional Law <span class="italic" style="color:#2ecc71">Library</span></h2>
+        <p style="color:var(--text2)">Constitution of India — All Parts, Articles &amp; Schedules</p>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="padding:32px 24px 80px">
+    <div class="law-page-tabs" id="constitutional-tabs">
+      <button class="law-page-tab active" onclick="switchLawTab('constitutional','part1_4',this)">🗺️ Parts I–IV</button>
+      <button class="law-page-tab" onclick="switchLawTab('constitutional','part5_6',this)">🏛️ Parts V–VI</button>
+      <button class="law-page-tab" onclick="switchLawTab('constitutional','part7_12',this)">📜 Parts VII–XII</button>
+      <button class="law-page-tab" onclick="switchLawTab('constitutional','part13_22',this)">⚙️ Parts XIII–XXII</button>
+      <button class="law-page-tab" onclick="switchLawTab('constitutional','writs_cases',this)">🔑 Writs &amp; Cases</button>
+    </div>
+    <div class="law-page-search-row">
+      <input type="text" id="constitutional-search" placeholder="Search articles, keywords…" oninput="filterLawPage('constitutional')" />
+      <span id="constitutional-count" class="law-page-count"></span>
+    </div>
+    <div id="constitutional-content" class="law-accordion-grid"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<footer style="padding:20px;text-align:center;color:#a09882;font-size:0.85rem;border-top:1px solid rgba(200,170,90,0.2);margin-top:40px">
+  ⚠️ This platform provides general legal information using AI and is not a substitute for professional legal advice. 
+  Always consult a qualified lawyer for serious legal matters.
+</footer>
+</body>
+</html>
