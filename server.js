@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=";
 
