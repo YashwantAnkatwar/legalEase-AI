@@ -1,105 +1,339 @@
-# LegalEase AI – Hackathon Project
+# ⚖️ LegalEase AI – AI-Powered Legal Intelligence Platform
 
-**LegalEase AI** is an AI-driven legal platform that helps users learn and interact with Indian law. It features an AI tutor for Q&A, a structured law database, quizzes, and a news dashboard, all in a multilingual (English/Hindi) and responsive UI with light/dark themes【8†L39-L44】【10†L63-L71】.  
+![Node.js](https://img.shields.io/badge/Node.js-18+-green)
+![Express](https://img.shields.io/badge/Express.js-Backend-black)
+![Gemini](https://img.shields.io/badge/Google-Gemini-blue)
+![Render](https://img.shields.io/badge/Deployed%20on-Render-purple)
 
+LegalEase AI is an AI-driven legal assistance platform designed to simplify Indian laws and legal procedures for citizens. It empowers users with instant legal guidance, educational resources, emergency legal assistance, scenario analysis, and AI-powered document generation using Google's Gemini AI.
 
----
-
-## Features
-
-- **AI Tutor (Learn):** Chat-based legal Q&A with context-aware responses.  
-- **Law Database (Education):** Browse laws (IPC, Constitution, etc.) with official definitions, simple explanations, and examples.  
-- **AI Quiz:** Generate 5 random multiple-choice questions per topic (via Google Gemini API) each time.  
-- **Legal News Dashboard:** View latest legal news, case updates, and AI-generated daily tips; filterable and refreshable.  
-- **User Profile:** Track XP points, bookmarks, saved news, and switch language/theme.  
-- **Multilingual & Theming:** English/Hindi support; toggle between day/night UI modes.  
-- **Responsive UI:** Mobile-friendly design and smooth animations for a modern feel.
+> **Disclaimer:** LegalEase AI is intended for educational and informational purposes only. It does not provide professional legal advice. Users should consult qualified legal professionals for legal matters requiring expert assistance.
 
 ---
 
-## Technologies
+## 🚀 Problem Statement
 
-| Category        | Technologies                                                                                     |
-|-----------------|--------------------------------------------------------------------------------------------------|
-| Frontend        | HTML/CSS/JavaScript, Bootstrap (UI), DOMPurify (XSS sanitizer)【33†L222-L227】                      |
-| Backend         | Node.js (LTS)【8†L39-L44】, Express.js (web framework)【10†L63-L71】                                 |
-| AI & API        | Google Gemini (Generative Language API)【21†L90-L93】                                              |
-| Security/Utils  | cors (Cross-Origin Resource Sharing) middleware【3†L126-L134】, JSON Web Tokens (future for auth) |
+India faces a significant justice gap:
 
----
+* **77%** of Indians lack access to formal legal advice or assistance.
+* **70%+** of citizens are unaware of their legal rights.
+* Legal consultations are often expensive and inaccessible.
+* Emergency legal guidance is difficult to obtain quickly.
+* Legal language is complex and difficult for common citizens to understand.
 
-## Usage
+With over **500 million first-time internet users**, India needs a scalable, intelligent, and accessible legal assistance platform.
 
-- **Learn (AI Tutor):** Click *Learn*, type a legal question or “start basics,” and get step-by-step answers via the Gemini AI. Follow prompts like “proceed” to continue the lesson.  
-- **Education (Law Browser):** Navigate law categories (e.g. Criminal, Constitution). Click a law to view its real definition, simple meaning, and example. Content is fetched dynamically when opened.  
-- **Quiz:** Select a topic (e.g. IPC, Fundamental Rights). The app calls Gemini to generate 5 multiple-choice questions. Answer them one by one; your score is shown at the end.  
-- **Profile:** Click the profile icon to see your name (placeholder), XP points, and settings. Switch between English/Hindi or Day/Night mode. View **Bookmarks** (saved laws) and **Saved News** you marked.  
-- **News Dashboard:** Accessed via the News section. Shows latest legal news and case updates with filter options. Click “Refresh News” for new items and “Save” on any article to add it to your profile’s Saved News. Daily legal tips are regenerated on each refresh.
-- **Emergency (AI Assistant):** Click *Emergency* to get instant legal help in urgent situations. Simply describe your scenario, such as being scammed or facing harassment, and the system will analyze it to provide relevant laws, step-by-step actions to take, and any required documents. The feature is designed to give quick, practical, and actionable guidance when users need immediate legal clarity.
-
-- **Docs (Legal Document Generator):** In the *Docs* section, users can generate commonly used legal documents such as FIR drafts, legal notices, RTI applications, and complaint letters. By entering the required details through guided inputs, the platform uses AI to create a structured and ready-to-use document, along with a preview to review before final use.
+**LegalEase AI aims to democratize legal knowledge and empower every Indian citizen with accessible legal information.**
 
 ---
 
-## API Endpoints
+## 🌐 Live Demo
 
-| Method | Path            | Request                     | Response                     | Description                           |
-|--------|-----------------|-----------------------------|------------------------------|---------------------------------------|
-| `POST` | `/api/quiz`     | JSON `{ "topic": "IPC" }`   | JSON array of 5 Q&A objects  | Generate quiz questions on given topic |
-| `GET`  | `/api/law/:id`  | —                           | JSON `{ real, simple, example }` | Get law details (definitions)      |
-| `POST` | `/api/gemini`   | JSON `{ prompt: "..."} `    | JSON AI answer              | Proxy to Gemini API for any prompt     |
-| `GET`  | `/api/profile`  | —                           | JSON user data (XP, bookmarks, savedNews) | Retrieve user profile info |
-| `POST` | `/api/profile`  | JSON with updated profile   | JSON success/failure         | Save/update user profile               |
+[🚀 Try LegalEase AI](https://legalease-ai-oz2j.onrender.com)
 
 ---
 
-## Testing
+## ✨ Features
 
-- **Sanitization Test:** Inject a script tag in the AI input (e.g. `<script>alert(1)</script>`) and verify it does **not** execute. DOMPurify strips unsafe elements【33†L222-L227】.  
-- **API Fetch Test:** Use `curl` to fetch endpoints. For example:  
-  ```bash
-  curl http://localhost:3000/api/law/420
-  ```  
-  Confirm you get valid JSON with law details.  
-- **Quiz Generation Test:** Request the quiz endpoint as shown above and ensure you receive 5 unique questions in JSON.  
+### 🤖 AI Legal Tutor
+
+* Interactive legal Q&A powered by Google Gemini AI.
+* Simplified explanations of Indian legal concepts.
+* Step-by-step legal learning experience.
+
+### 📚 Law Education Center
+
+* Browse and explore Indian laws in simple language.
+* Covers Constitutional Articles, IPC Sections, and legal concepts.
+* Includes:
+
+  * Official definitions
+  * Simplified explanations
+  * Real-world examples
+
+### 🚨 Emergency Legal Assistance
+
+Provides immediate legal guidance during urgent situations such as:
+
+* Online scams and fraud
+* Cybercrime incidents
+* Harassment cases
+* Wrongful arrests
+
+Includes:
+
+* Relevant laws and provisions
+* Recommended next steps
+* Required documentation guidance
+
+### ⚖️ Scenario Analyzer
+
+Describe a real-life legal situation and receive:
+
+* Applicable Indian laws
+* Risk assessment
+* Recommended legal actions
+* Practical next steps
+
+### 📄 Legal Document Generator
+
+Generate commonly used legal documents including:
+
+* FIR Drafts
+* RTI Applications
+* Legal Notices
+* Complaint Letters
+* Affidavits
+
+AI assists users in creating structured and ready-to-use legal documents.
+
+### 📝 AI Quiz Generator
+
+* Interactive quizzes on legal topics.
+* Dynamic AI-generated questions.
+* Progress tracking to encourage legal awareness.
+
+### 📰 Legal News & Updates
+
+Stay informed with:
+
+* Latest legal news
+* Judicial updates
+* Important legal developments
+* Daily legal tips
+
+### ❓ Help & FAQ
+
+* Quick answers to frequently asked legal questions.
+* Accessible legal information without requiring a lawyer.
+
+### 🌐 Multilingual Support
+
+* English Support
+* Hindi Support
+
+### 🎨 Modern User Experience
+
+* Responsive design for desktop and mobile devices.
+* Light Mode and Dark Mode support.
+* Clean and intuitive interface.
 
 ---
 
-## Deployment
+## 📸 Screenshots
 
-- **Heroku:** Create a Heroku app, push your code, and set Config Vars for `GEMINI_API_KEY`, `MONGO_URI`, etc. (use the Heroku dashboard or CLI)【34†L273-L279】.  
-- **Vercel:** Import the GitHub repo in Vercel, then add environment variables under Project Settings. Deploy; Vercel will handle the build.  
-- **Firebase:** Set up Firebase Hosting and Cloud Functions. Use `firebase functions:config:set` for keys, then `firebase deploy` (see Firebase docs for configuring `.env`-style vars).
+### 🏠 Home Page
+![Home Page](screenshots/home.png)
 
----
+### 🤖 AI Tutor
+![AI Tutor](screenshots/ai_tutor.png)
 
-## Troubleshooting
+### 🚨 Emergency Assistance
+![Emergency Assistance](screenshots/emergency.png)
 
-- **CORS Errors:** Ensure you enabled CORS in Express (`app.use(cors())`)【3†L126-L134】.  
-- **Missing API Key:** Check that `GEMINI_API_KEY` is correctly set in `.env` and not quoted.  
-- **JSON Parse Errors:** Confirm the Gemini API returns strict JSON (no extra text). If parse fails, log the raw response.  
-- **DOMPurify Missing:** If scripts still run, verify you included the DOMPurify script in your HTML (or imported it) before using it.  
-
----
-
-## Contribution & License
-
-- Contributions are welcome via GitHub pull requests. Follow any existing code style.  
-- **License:** MIT (see [LICENSE](LICENSE) file).  
-- **Contact:** Developer Name – [email@example.com].
+### 🎓 Education
+![Document Generator](screenshots/education.png)
 
 ---
 
-## Architecture Flow
+## 🛠️ Technology Stack
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+
+### Backend
+
+* Node.js
+* Express.js
+
+### AI Integration
+
+* Google Gemini API (Gemini 2.5 Flash)
+
+### Deployment
+
+* Render
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+## 📁 Project Structure
+
+```text
+LegalEase-AI/
+├── index.html
+├── styles.css
+├── script.js
+├── server.js
+├── package.json
+├── package-lock.json
+├── .gitignore
+├── .env.example
+├── screenshots/
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/YashwantAnkatwar/legalEase-AI.git
+cd legalEase-AI
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### 4. Start the Application
+
+```bash
+node server.js
+```
+
+The application will run on:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## 🚀 Deployment
+
+The project is deployed using **Render**.
+
+### Required Environment Variables
+
+| Variable         | Description           |
+| ---------------- | --------------------- |
+| `GEMINI_API_KEY` | Google Gemini API Key |
+
+### Deploy on Render
+
+1. Connect your GitHub repository to Render.
+2. Create a new Web Service.
+3. Set:
+
+**Build Command**
+
+```bash
+npm install
+```
+
+**Start Command**
+
+```bash
+node server.js
+```
+
+4. Add the environment variable:
+
+```text
+GEMINI_API_KEY=your_actual_api_key
+```
+
+5. Deploy the service.
+
+---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint  | Description                                     |
+| ------ | --------- | ----------------------------------------------- |
+| `GET`  | `/health` | Check server status                             |
+| `POST` | `/ai`     | Send prompts to Gemini AI and receive responses |
+
+### Example Request
+
+```json
+{
+  "prompt": "Explain Article 21 of the Indian Constitution",
+  "mode": "legal-tutor"
+}
+```
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
-    UserBrowser --> Frontend[Browser (UI)]
-    Frontend --> BackEnd[Node/Express Server]
-    BackEnd -->|HTTP Request| GeminiAPI[Google Gemini API]
-    GeminiAPI --> BackEnd
-    BackEnd --> Frontend
-    Frontend --> UserBrowser
+    User[User] --> Frontend[Frontend Interface]
+    Frontend --> Backend[Node.js + Express Server]
+    Backend --> Gemini[Google Gemini API]
+    Gemini --> Backend
+    Backend --> Frontend
+    Frontend --> User
 ```
+
 ---
-"# legalEase-AI" 
+
+## 🎯 Target Users
+
+* General Citizens
+* Students
+* Rural Communities
+* Activists
+* Law Students
+
+---
+
+## 📈 Expected Impact
+
+* Faster access to legal guidance.
+* Improved legal literacy among citizens.
+* Reduced confusion regarding legal rights and procedures.
+* Increased accessibility to legal information across India.
+
+---
+
+## 🔮 Future Scope
+
+* Support for additional Indian regional languages.
+* Voice-enabled legal assistant.
+* Verified lawyer consultation network.
+* Court case tracking system.
+* Mobile applications for Android and iOS.
+* Secure cloud storage for legal documents.
+* Legal awareness notifications and alerts.
+* Government portal integration.
+
+---
+
+## 👨‍💻 Team
+
+- Ashutosh Kumar
+- Abhishek Kumar
+- Nitish Verma
+- Yashwant Ankatwar
+
+GitHub: https://github.com/YashwantAnkatwar
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a **star ⭐** on GitHub!
+
+Together, let's make legal knowledge accessible to every Indian citizen.
