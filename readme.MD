@@ -122,18 +122,13 @@ Stay informed with:
 
 ## 📸 Screenshots
 
-### 🏠 Home Page
-![Home Page](screenshots/home.png)
+| Home Page | AI Tutor |
+|-----------|-----------|
+| <img src="screenshots/home.png" width="400"> | <img src="screenshots/ai_tutor.png" width="400"> |
 
-### 🤖 AI Tutor
-![AI Tutor](screenshots/ai_tutor.png)
-
-### 🚨 Emergency Assistance
-![Emergency Assistance](screenshots/emergency.png)
-
-### 🎓 Education
-![Document Generator](screenshots/education.png)
-
+| Emergency Assistance | Education Center |
+|----------------------|-------------------|
+| <img src="screenshots/emergency.png" width="400"> | <img src="screenshots/education.png" width="400"> |
 ---
 
 ## 🛠️ Technology Stack
