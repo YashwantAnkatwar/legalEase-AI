@@ -89,6 +89,10 @@ app.post("/ai", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.sendFile(join(__dirname, "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`Running on http://localhost:${PORT}`);
 });
